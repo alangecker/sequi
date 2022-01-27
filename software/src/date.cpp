@@ -38,6 +38,19 @@ void printDateTime(const RtcDateTime& dt)
     Serial.print(datestring);
 }
 
+void date_update(uint32_t secondsFrom2000) {
+    Serial.println(secondsFrom2000);
+    RtcDateTime time = RtcDateTime(secondsFrom2000);
+    Serial.print("update time: ");
+    printDateTime(time);
+    Serial.println("");
+    RtcDateTime now = Rtc.GetDateTime();
+    if (now < time) {
+        Rtc.SetDateTime(time);
+    } else {
+        Serial.println("provided time is older than compiled time. there must be an erro");
+    }
+}
 
 void date_setup() {
   Serial.print("compiled: ");

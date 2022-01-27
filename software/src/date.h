@@ -9,6 +9,8 @@
 // void printDateTime(const RtcDateTime& dt);
 void date_setup();
 
+void date_update(uint32_t secondsFrom2000);
+
 void printDateTime(const RtcDateTime& dt);
 RtcDateTime getDate();
 

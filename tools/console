@@ -1,0 +1,18 @@
+#!/usr/bin/python3
+import os
+import serial
+
+import os.path
+
+
+if os.path.exists("/dev/ttyUSB1"):
+    ser = serial.Serial("/dev/ttyUSB1",9600)
+else:
+    ser = serial.Serial("/dev/ttyUSB0",9600)
+
+
+print("Date                    Mode    | Sun	Plant	Sense	| Sun  Plant\tSense	| Movement")
+while True :
+    line = ser.readline()
+    print(line.decode('utf-8').strip())
+

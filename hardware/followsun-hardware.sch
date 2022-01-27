@@ -1225,4 +1225,6 @@ Wire Wire Line
 Connection ~ 3050 7000
 Wire Wire Line
 	3050 7000 3300 7000
+Text Notes 5800 5800 0    50   ~ 0
+wrong I2C pins !!
 $EndSCHEMATC

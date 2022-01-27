@@ -1,0 +1,68 @@
+#!/usr/bin/python3
+import threading
+import os
+import sys
+import serial
+import re
+import os.path
+import time
+from datetime import datetime
+
+
+def seconds_since_2000():
+    now = datetime.now()
+    yr2000 = datetime(2000, 1, 1, 0, 0, 0, 0)
+    return int((now - yr2000).total_seconds())
+
+
+datere = re.compile('^[0-9\- \:]+\t')
+
+if os.path.exists("/dev/ttyUSB1"):
+    ser = serial.Serial("/dev/ttyUSB1",9600)
+else:
+    ser = serial.Serial("/dev/ttyUSB0",9600)
+
+
+def write_time():
+    ser.write(bytes('z', 'utf-8'))
+    ser.reset_output_buffer()
+    time.sleep(1)
+    ser.write(bytes(str(seconds_since_2000())+"\n", 'utf-8'))
+    ser.reset_output_buffer()
+
+def stdout_loop():
+    timeSent = False
+    executed = False
+    while True :
+        line = ser.readline().decode('utf-8')
+        # print(line.strip())
+
+        if datere.match(line) and not timeSent:
+            print("Old Time: {}".format(line.strip()[0:19]))
+            write_time()
+            timeSent = True
+
+        if "update" in line:
+            print("Set to:   {}".format(line[13:32]))
+            executed = True
+
+        if datere.match(line) and executed:
+            print("New Time: {}".format(line.strip()[0:19]))
+            sys.exit(0)
+
+
+
+threading.Thread(target=stdout_loop, args=(), name='stdout').start()
+
+
+# while True :
+#     line = ser.readline().decode('utf-8')
+#     if datere.match(line):
+#         print("Old Time: {}".format(line.strip()[0:19]))
+
+
+#         break
+
+
+
+# z636995077

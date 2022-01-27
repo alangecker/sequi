@@ -32,6 +32,15 @@ void setup() {
 
 void handleCommand(char cmd) {
       switch(cmd) {
+        case 'z':
+          while(true) {
+            if(!Serial.available()) continue;
+            uint32_t time = Serial.parseInt();
+            Serial.println(time);
+            date_update(time);
+            return;
+          }
+          break;
 #ifdef AZIMUTH_ENABLE
         case 'a':
           if(get_azimuth_movement() != DIRECTION_LEFT) {
